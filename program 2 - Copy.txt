@@ -1,0 +1,137 @@
+-- Create a relational database schema for a Project, described by the following relations. 
+-- STUDENT (Rollno: integer, Name: String, Sem: integer, Degree: String, Contact no: 
+-- integer, 
+-- Guide_No: integer) 
+-- GUIDE (Guide_name: String, Guide_No: integer, Guide_reserach_domain: String, 
+-- Contact_No: 
+-- integer, Email_Id: String) 
+-- PROJECT (Project_No: Integer, Project_title: String, Project_Area: String, Start_dt, date, 
+-- Guide_No: integer) 
+-- GROUP (Group_Code: integer, Roll_No:integer ) 
+-- PROJECT_GROUP (Group_Code: integer, Project_No: integer, no_of_students:integer) 
+-- For the above schema, perform the following. 
+-- a) Create the tables with the appropriate integrity constraints 
+-- b) Insert around 10 records in each of the tables 
+-- c) Find the list of guide, who are guiding more than two student groups. 
+-- d) Find the list of project no, project name & name of guide, in domain of Data Base. 
+-- e) Create a view as student_project details that lists student name, project name and guide 
+-- name
+
+create database PROJECT;
+use project;
+-- STUDENT (Rollno: integer, Name: String, Sem: integer, Degree: String, Contact no: 
+-- integer, 
+create table student(
+roll_no int primary key ,name varchar(50),sem int,degree varchar(255),contact_no bigint,guide_no int,
+foreign key(guide_no)references guide(guide_no)
+);
+-- drop table student ;
+
+-- GUIDE (Guide_name: String, Guide_No: integer, Guide_reserach_domain: String, 
+-- Contact_No: 
+-- integer, Email_Id: String) 
+create table guide(
+guide_name varchar(100), guide_no int primary key , domain varchar(40),contact_no bigint, email_id text
+-- foreign key (guide_no) references student(guide_no)
+);
+-- PROJECT (Project_No: Integer, Project_title: String, Project_Area: String, Start_dt, date, 
+-- Guide_No: integer) 
+create table project(
+	proj_no int primary key, proj_title text , proj_area text , start_date date , guide_no int references guide(guide_no)
+);
+-- GROUP (Group_Code: integer, Roll_No:integer ) 
+create table grou(
+	group_code varchar(10), roll_no int references student(roll_no)
+);
+-- PROJECT_GROUP (Group_Code: integer, Project_No: integer, no_of_students:integer) 
+create table project_group(
+	group_code int references grou(group_code), proj_no int references project(proj_no),no_of_student int 
+);
+insert into student values (1,"Gaurav",4,"cse",9843289423,null);
+INSERT INTO student (roll_no, name, sem, degree, contact_no, guide_no)
+VALUES
+    (2, 'Jane Smith', 2, 'Electrical Engineering', 9876543210, 102),
+    (3, 'Michael Johnson', 4, 'Mechanical Engineering', 9871234560, 103),
+    (4, 'Emily Brown', 1, 'Chemistry', 4567891230, 105),
+    (5, 'William Lee', 2, 'Physics', 7891234560, 104),
+    (6, 'Sophia Martinez', 3, 'Biology', 9876543210, 106),
+    (7, 'Oliver Anderson', 4, 'Mathematics', 4567890123, 107),
+    (8, 'Ava Thomas', 1, 'Economics', 9012345678, 108),
+    (9, 'Ethan Clark', 2, 'History', 5678901234, 109),
+    (10, 'Isabella Garcia', 3, 'English Literature', 2345678901, 110);
+INSERT INTO guide (guide_name, guide_no, domain, contact_no, email_id)
+VALUES
+    ('Professor Smith', 101, 'Computer Science', 8765432109, 'smith@example.com'),
+    ('Dr. Johnson', 102, 'Electrical Engineering', 6789012345, 'johnson@example.com'),
+    ('Dr. Anderson', 103, 'Mechanical Engineering', 7890123456, 'anderson@example.com'),
+    ('Professor Brown', 105, 'Chemistry', 3456789012, 'brown@example.com'),
+    -- Add more dummy records here...
+    ('Dr. Green', 106, 'Physics', 2345678901, 'green@example.com'),
+    ('Professor Lee', 104, 'Biology', 5432109876, 'lee@example.com'),
+    ('Dr. Wang', 108, 'Civil Engineering', 8765432109, 'wang@example.com'),
+    ('Professor Chen', 109, 'Mathematics', 9876543210, 'chen@example.com'),
+    ('Dr. Kim', 107, 'Astronomy', 5678901234, 'kim@example.com'),
+    ('Professor Davis', 110, 'Environmental Science', 6789012345, 'davis@example.com');
+INSERT INTO project (proj_no, proj_title, proj_area, start_date, guide_no)
+VALUES
+    (1, 'Web Development', 'Software Engineering', '2023-01-15', 101),
+    (2, 'Power Systems', 'Electrical Engineering', '2023-03-20', 102),
+    (3, 'Robotics', 'Mechanical Engineering', '2023-02-10', 103),
+    (4, 'Chemical Reactions', 'Chemistry', '2023-04-05', 105),
+    -- Add more dummy records here...
+    (5, 'Quantum Mechanics', 'Physics', '2023-05-12', 106),
+    (6, 'Cell Biology', 'Biology', '2023-06-18', 104),
+    (7, 'Bridge Design', 'Civil Engineering', '2023-07-01', 108),
+    (8, 'Number Theory', 'Mathematics', '2023-08-09', 109),
+    (9, 'Black Holes', 'Astronomy', '2023-09-25', 107),
+    (10, 'Sustainable Energy', 'Environmental Science', '2023-10-30', 110);
+INSERT INTO grou (group_code, roll_no)
+VALUES
+    ('G1', 1),
+    ('G2', 2),
+    ('G1', 3),
+    ('G3', 4),
+    -- Add more dummy records here...
+    ('G2', 5),
+    ('G1', 6),
+    ('G4', 7),
+    ('G3', 8),
+    ('G2', 9),
+    ('G4', 10);
+INSERT INTO project_group (group_code, proj_no, no_of_student)
+VALUES
+    (1, 1, 5),
+    (2, 2, 4),
+    (3, 3, 6),
+    (4, 4, 3),
+    -- Add more dummy records here...
+    (1, 5, 4),
+    (2, 6, 5),
+    (3, 7, 3),
+    (4, 8, 6),
+    (1, 9, 2),
+    (2, 10, 5);
+    select * from student;
+    -- c) Find the list of guide, who are guiding more than two student groups. 
+    select *
+    from guide as g 
+    join project as p on g.guide_no = p.guide_no
+    join project_group as pg on pg.proj_no = p.proj_no
+    group by g.guide_no,g.guide_name
+    HAVING COUNT(DISTINCT pg.group_code) > 2;
+    
+    
+-- d) Find the list of project no, project name & name of guide, in domain of Data Base. 
+	select p.proj_no,p.proj_title,g.guide_name 
+    from project as p
+    join guide as g 
+    on p.guide_no = g.guide_no;
+-- e) Create a view as student_project details that lists student name, project name and guide 
+-- name
+ create view student_project as
+ select s.name as student_name,p.proj_title, g.guide_name
+ from student as s
+ join guide as g on s.guide_no = g.guide_no
+ join project as p on p.guide_no = g.guide_no;
+ select * from student_project;
+
