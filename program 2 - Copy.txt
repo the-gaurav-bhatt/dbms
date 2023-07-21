@@ -19,31 +19,23 @@
 
 create database PROJECT;
 use project;
--- STUDENT (Rollno: integer, Name: String, Sem: integer, Degree: String, Contact no: 
--- integer, 
+
+create table guide(
+guide_name varchar(100), guide_no int primary key , domain varchar(40),contact_no bigint, email_id text
+); 
 create table student(
 roll_no int primary key ,name varchar(50),sem int,degree varchar(255),contact_no bigint,guide_no int,
 foreign key(guide_no)references guide(guide_no)
 );
--- drop table student ;
 
--- GUIDE (Guide_name: String, Guide_No: integer, Guide_reserach_domain: String, 
--- Contact_No: 
--- integer, Email_Id: String) 
-create table guide(
-guide_name varchar(100), guide_no int primary key , domain varchar(40),contact_no bigint, email_id text
--- foreign key (guide_no) references student(guide_no)
-);
--- PROJECT (Project_No: Integer, Project_title: String, Project_Area: String, Start_dt, date, 
--- Guide_No: integer) 
+
+
 create table project(
 	proj_no int primary key, proj_title text , proj_area text , start_date date , guide_no int references guide(guide_no)
 );
--- GROUP (Group_Code: integer, Roll_No:integer ) 
 create table grou(
 	group_code varchar(10), roll_no int references student(roll_no)
 );
--- PROJECT_GROUP (Group_Code: integer, Project_No: integer, no_of_students:integer) 
 create table project_group(
 	group_code int references grou(group_code), proj_no int references project(proj_no),no_of_student int 
 );
