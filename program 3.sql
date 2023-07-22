@@ -88,4 +88,34 @@ VALUES
     (208, 'Emma Martinez', 75000),
     (209, 'Liam Anderson', 93000),
     (210, 'Olivia Garcia', 78000);
-
+-- c) Find the names of aircraft such that all pilots certified to operate them earn more than 
+-- 80,000. 
+	select a.aname,e.salary from Aircraft as a
+    join Certified as c on 
+    a.aid = c.aid
+    join Employees as e on
+    e.eid = c.eid
+    where e.salary > 80000;
+    
+-- d) For each pilot who is certified for more than three aircraft, find the eid and the maximum 
+-- cruising range of the aircraft that he (or she) is certified for. 
+-- select c.eid from Aircraft as a
+-- join Certified as c on 
+-- a.aid = c.aid
+-- group by a.aid;
+SELECT c.eid, a.cruisingrange
+FROM Certified c
+JOIN Aircraft a ON c.aid = a.aid
+GROUP BY c.eid
+HAVING COUNT(c.aid) > 3;
+-- e)Find the names of pilots whose salary is less than the price of the cheapest route from Los 
+-- Angeles to Honolulu. 
+select e.ename,e.salary,f.price from Employees e,Flights f
+where e.salary >(
+select f.price from Flights as f
+where f.from_location= 'Los Angeles' and f.to_location = 'New York'
+);
+-- f) Find the second highest salary of an employee.
+select e.salary from Employees e
+order by e.salary desc
+limit 1 offset 1;

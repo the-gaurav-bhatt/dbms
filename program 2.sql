@@ -125,7 +125,8 @@ VALUES
 	select p.proj_no,p.proj_title,g.guide_name 
     from project as p
     join guide as g 
-    on p.guide_no = g.guide_no;
+    on p.guide_no = g.guide_no
+     ;
 -- e) Create a view as student_project details that lists student name, project name and guide 
 -- name
  create view student_project as
